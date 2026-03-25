@@ -1,0 +1,19 @@
+# Railway deployment configuration
+# https://railway.app
+
+{
+  "build": {
+    "builder": "NIXPACKS",
+    "nixpacksPlan": {
+      "runtime": "nodejs22",
+      "install": ["npm ci --frozen-lockfile"],
+      "build": ["npm run build"],
+      "start": "node dist/index.js"
+    }
+  },
+  "deploy": {
+    "numInstances": 1,
+    "restartPolicy": "ON_FAILURE",
+    "restartLimit": 3
+  }
+}
