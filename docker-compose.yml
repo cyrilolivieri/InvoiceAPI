@@ -1,0 +1,105 @@
+version: "3.9"
+
+services:
+  # ─── PostgreSQL ────────────────────────────────────────────
+  postgres:
+    image: postgres:16-alpine
+    container_name: invoiceapi-postgres
+    restart: unless-stopped
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-invoiceapi}
+      POSTGRES_USER: ${POSTGRES_USER:-invoiceapi}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-invoiceapi_dev_password}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-invoiceapi} -d ${POSTGRES_DB:-invoiceapi}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  # ─── Redis ─────────────────────────────────────────────────
+  redis:
+    image: redis:7-alpine
+    container_name: invoiceapi-redis
+    restart: unless-stopped
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    volumes:
+      - redisdata:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+
+  # ─── PaddleOCR HTTP Service ────────────────────────────────
+  paddleocr:
+    build:
+      context: ./ocr-service
+      dockerfile: Dockerfile
+    container_name: invoiceapi-paddleocr
+    restart: unless-stopped
+    ports:
+      - "${PADDLEOCR_PORT:-5000}:5000"
+    volumes:
+      - paddle-models:/root/.paddleocr
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:5000/health || exit 1"]
+      interval: 30s
+      timeout: 15s
+      retries: 5
+      start_period: 60s
+
+  # ─── InvoiceAPI Application ─────────────────────────────────
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: invoiceapi-app
+    restart: unless-stopped
+    ports:
+      - "${APP_PORT:-3000}:3000"
+    environment:
+      NODE_ENV: ${NODE_ENV:-development}
+      PORT: 3000
+      LOG_LEVEL: ${LOG_LEVEL:-info}
+      # Database — local PostgreSQL
+      DATABASE_URL: postgresql://${POSTGRES_USER:-invoiceapi}:${POSTGRES_PASSWORD:-invoiceapi_dev_password}@postgres:5432/${POSTGRES_DB:-invoiceapi}
+      # Redis — local Redis
+      UPSTASH_REDIS_REST_URL: http://redis:6379
+      UPSTASH_REDIS_REST_TOKEN: ${REDIS_PASSWORD:-local_dev_token}
+      # PaddleOCR — local service
+      PADDLEOCR_URL: http://paddleocr:5000
+      # Mistral (optional — fallback if PaddleOCR unavailable)
+      MISTRAL_API_KEY: ${MISTRAL_API_KEY:-}
+      # OpenAI
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      # CORS
+      CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:3000,http://localhost:5173}
+      API_BASE_URL: http://localhost:${APP_PORT:-3000}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      paddleocr:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:3000/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+
+volumes:
+  pgdata:
+    name: invoiceapi-pgdata
+  redisdata:
+    name: invoiceapi-redisdata
+  paddle-models:
+    name: invoiceapi-paddle-models
