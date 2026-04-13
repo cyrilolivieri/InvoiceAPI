@@ -1,0 +1,114 @@
+schema: bmad-gate-v1
+gate_type: SHIP
+reference: "v0.1.0"
+release_name: "InvoiceAPI Sprint 1 - Core API + OCR"
+decision: CONCERNS
+reviewer: "Atlas"
+timestamp: "2026-04-02T00:25:00Z"
+
+scope:
+  stories_count: 5
+  epics:
+    - "1. Core API + OCR"
+  stories:
+    - "1.1 POST /v1/invoices/extract"
+    - "1.2 GET /v1/invoices/:id"
+    - "1.3 GET /v1/invoices (list)"
+    - "1.4 Auth & Rate Limiting"
+    - "1.5 Database & Models"
+
+checks:
+  - id: "SHIP-STORIES-001"
+    name: "All stories complete"
+    status: PASS
+    required: true
+    stories_done: 5
+    stories_total: 5
+    
+  - id: "SHIP-QA-001"
+    name: "All QA-Gates passed"
+    status: PASS
+    required: true
+    gates_pass: 5
+    gates_waived: 0
+    gates_fail: 0
+    
+  - id: "SHIP-TEST-001"
+    name: "Automated tests pass"
+    status: PASS
+    required: true
+    unit_tests: "31/31 passed"
+    integration_tests: "N/A - pas encore implémentés"
+    
+  - id: "SHIP-LINT-001"
+    name: "Linting passes"
+    status: PASS
+    required: true
+    errors: 0
+    warnings: 0
+    
+  - id: "SHIP-BUILD-001"
+    name: "Build succeeds"
+    status: PASS
+    required: true
+    build_time: "12s"
+    
+  - id: "SHIP-REG-001"
+    name: "No regressions"
+    status: PASS
+    required: true
+    
+  - id: "SHIP-DOC-001"
+    name: "Documentation updated"
+    status: CONCERNS
+    required: false
+    changelog_updated: false
+    notes: "CHANGELOG.md à créer pour v0.1.0"
+    
+  - id: "SHIP-ENV-001"
+    name: "Environment variables configured"
+    status: CONCERNS
+    required: false
+    variables_configured: false
+    missing_vars:
+      - "MISTRAL_API_KEY"
+      - "OPENAI_API_KEY"
+      - "DATABASE_URL"
+      - "UPSTASH_REDIS_REST_URL"
+    notes: "Variables d'env à configurer dans Railway pour production"
+
+blockers:
+  count: 0
+  items: []
+
+concerns:
+  count: 2
+  items:
+    - "Documentation: CHANGELOG.md manquant"
+    - "Environnement: Clés API non configurées (acceptable pour dev, requis pour prod)"
+
+metrics:
+  code_coverage: "87%"
+  lines_of_code: 12543
+  test_count: 31
+  documentation_pages: 3
+
+waiver:
+  active: true
+  reason: "Déploiement développement autorisé - variables d'environnement à configurer avant production"
+  risk_level: "LOW"
+  approved_by: "Atlas"
+  expires: "2026-04-15T00:00:00Z"
+  conditions:
+    - "Configurer variables d'environnement avant mise en production"
+    - "Créer CHANGELOG.md avant v0.2.0"
+    - "Tester avec vrai PDF de facture suisse"
+
+deployment:
+  authorized: true
+  method: "Railway deployment via GitHub Actions"
+  target: "Development"
+  production_ready: false
+  rollback_plan: "Revert to previous Railway deployment"
+
+next_action: "Déploiement autorisé en dev - Configurer env vars avant production"

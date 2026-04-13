@@ -3,7 +3,15 @@ FROM python:3.11-slim
 WORKDIR /app
 
 # Install curl (for healthcheck) + PaddlePaddle CPU + PaddleOCR
-RUN apt-get update && apt-get install -y --no-install-recommends curl && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    curl \
+    libgomp1 \
+    libglib2.0-0 \
+    libsm6 \
+    libxext6 \
+    libxrender-dev \
+    libgl1 \
+    && rm -rf /var/lib/apt/lists/*
 
 RUN pip --no-cache-dir install \
     paddlepaddle==3.0.0b2 \

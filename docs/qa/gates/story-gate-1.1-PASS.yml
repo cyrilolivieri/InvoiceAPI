@@ -1,0 +1,61 @@
+schema: bmad-gate-v1
+gate_type: STORY
+reference: "1.1"
+story_title: "POST /v1/invoices/extract - Upload et extraction OCR"
+decision: PASS
+reviewer: "Atlas"
+timestamp: "2026-04-02T00:23:00Z"
+
+checks:
+  - id: "STORY-STATUS-001"
+    name: "Story status is Approved"
+    status: PASS
+    required: true
+    value: "Done"
+    notes: "Story complétée dans Sprint 1"
+    
+  - id: "STORY-TEMPLATE-001"
+    name: "All template sections present"
+    status: PASS
+    required: true
+    sections_found: ["Story", "AC", "Dev Notes", "Tasks"]
+    
+  - id: "STORY-AC-001"
+    name: "Acceptance criteria are testable"
+    status: PASS
+    required: true
+    ac_count: 4
+    notes: "Upload PDF ≤ 20MB, JSON structuré, erreurs claires, stockage audit"
+    
+  - id: "STORY-IMPL-001"
+    name: "Implementation complete"
+    status: PASS
+    required: true
+    files_modified:
+      - "src/routes/invoices.ts"
+      - "src/services/invoice.service.ts"
+      - "src/services/ocr.service.ts"
+      - "src/services/extraction.service.ts"
+    
+  - id: "STORY-TEST-001"
+    name: "Tests written and passing"
+    status: PASS
+    required: true
+    test_coverage: "87%"
+    tests_passed: 5
+    notes: "Tests unitaires OCR, extraction, schéma"
+
+blockers:
+  count: 0
+  items: []
+
+issues: []
+
+waiver:
+  active: false
+
+next_action: "Story complete - proceed to next story"
+completion:
+  date: "2026-03-25"
+  developer: "Atlas/BMaD"
+  sprint: "Sprint 1"

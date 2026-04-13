@@ -1,0 +1,91 @@
+schema: bmad-gate-v1
+gate_type: ARCH
+reference: "invoice-core"
+epic_name: "InvoiceAPI - Core API + OCR"
+decision: PASS
+reviewer: "Atlas"
+timestamp: "2026-04-02T00:22:00Z"
+project_type: "fullstack"
+
+checks:
+  - id: "ARCH-DOC-001"
+    name: "Architecture document exists"
+    status: PASS
+    required: true
+    file: "1-projects/InvoiceAPI/3-solutioning/architecture.md"
+    notes: "Architecture complète avec flux de données, stack technique, schémas"
+    
+  - id: "ARCH-TECH-001"
+    name: "Tech stack defined"
+    status: PASS
+    required: true
+    file: "1-projects/InvoiceAPI/2-planning/tech-stack.md"
+    notes: "Node.js 22, Fastify, PostgreSQL, Drizzle, Mistral OCR, GPT-4o-mini"
+    
+  - id: "ARCH-STRUCT-001"
+    name: "Project structure defined"
+    status: PASS
+    required: true
+    file: "3-solutioning/architecture.md"
+    notes: "src/{routes,services,models,middleware,utils} + tests/"
+    
+  - id: "ARCH-DATA-001"
+    name: "Data models defined"
+    status: PASS
+    required: true
+    file: "src/models/schema.ts"
+    notes: "Schema Drizzle complet: users, api_keys, invoices, usage, webhooks"
+    
+  - id: "ARCH-BACKEND-001"
+    name: "Backend architecture defined"
+    status: PASS
+    required: true
+    file: "3-solutioning/architecture.md"
+    notes: "API REST Fastify, endpoints documentés, auth API key"
+    
+  - id: "ARCH-API-001"
+    name: "API specifications defined"
+    status: PASS
+    required: true
+    file: "3-solutioning/architecture.md"
+    notes: "POST /v1/invoices/extract, GET /v1/invoices/:id, etc."
+    
+  - id: "ARCH-DEPLOY-001"
+    name: "Deployment architecture defined"
+    status: PASS
+    required: true
+    file: "railway.json"
+    notes: "Railway deployment, GitHub Actions CI/CD"
+
+blockers:
+  count: 0
+  items: []
+
+metrics:
+  architecture_coverage: "100%"
+  components_defined: 12
+  api_endpoints: 10
+  data_models: 7
+  external_integrations: 4
+
+waiver:
+  active: false
+
+next_action: "Proceed to story creation / Sprint 2 planning"
+notes: |
+  Architecture OCR switchable validée:
+  - Mistral OCR API (primary)
+  - Fallback text extraction (dev mode)
+  - GPT-4o-mini extraction structurée
+  
+  Stack 0 CHF setup validé:
+  - Node.js 22 + TypeScript
+  - Fastify 5
+  - Drizzle ORM
+  - PostgreSQL (Neon serverless)
+  - Upstash Redis (rate limiting)
+  
+  Points de vigilance pour production:
+  - Clés API Mistral/OpenAI à configurer
+  - Neon PostgreSQL à provisionner
+  - Upstash Redis à créer

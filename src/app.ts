@@ -2,7 +2,6 @@ import fastify from 'fastify';
 import cors from '@fastify/cors';
 import multipart from '@fastify/multipart';
 import { config } from './config.js';
-import { logger } from './utils/logger.js';
 import { authMiddleware } from './middleware/auth.js';
 import { invoicesRouter } from './routes/invoices.js';
 import { webhooksRouter } from './routes/webhooks.js';
@@ -12,7 +11,16 @@ import { errorHandler } from './utils/error-handler.js';
 
 export async function buildApp() {
   const app = fastify({
-    logger: logger,
+    logger: {
+      level: config.logLevel,
+      transport:
+        config.nodeEnv === 'development'
+          ? {
+              target: 'pino-pretty',
+              options: { colorize: true, translateTime: 'SYS:standard' },
+            }
+          : undefined,
+    },
     disableRequestLogging: false,
   });
 

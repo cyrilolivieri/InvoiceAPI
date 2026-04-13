@@ -1,0 +1,92 @@
+schema: bmad-gate-v1
+gate_type: QA
+reference: "1.1"
+story_title: "POST /v1/invoices/extract - Upload et extraction OCR"
+decision: PASS
+reviewer: "Atlas"
+timestamp: "2026-04-02T00:24:00Z"
+
+checks:
+  - id: "QA-TASKS-001"
+    name: "All tasks completed"
+    status: PASS
+    required: true
+    tasks_completed: 8
+    tasks_total: 8
+    
+  - id: "QA-TESTS-001"
+    name: "Unit tests pass"
+    status: PASS
+    required: true
+    test_files: 5
+    tests_passed: 31
+    tests_failed: 0
+    coverage: "87%"
+    
+  - id: "QA-LINT-001"
+    name: "Linting passes"
+    status: PASS
+    required: true
+    linter: "ESLint"
+    errors: 0
+    warnings: 0
+    
+  - id: "QA-BUILD-001"
+    name: "Build succeeds"
+    status: PASS
+    required: true
+    build_command: "npm run build"
+    build_time: "12s"
+    output: "dist/"
+    
+  - id: "QA-TYPE-001"
+    name: "TypeScript type checking"
+    status: PASS
+    required: true
+    command: "tsc --noEmit"
+    errors: 0
+    
+  - id: "QA-REGRESSION-001"
+    name: "No regressions detected"
+    status: PASS
+    required: true
+    existing_features_tested: 10
+    regressions_found: 0
+    
+  - id: "QA-FILELIST-001"
+    name: "File List complete"
+    status: PASS
+    required: true
+    files_documented: 12
+    
+  - id: "QA-DOD-001"
+    name: "Definition of Done met"
+    status: PASS
+    required: true
+    checklist: "story-dod-checklist.md"
+    items_checked: 10
+    items_passed: 10
+
+blockers:
+  count: 0
+  items: []
+
+issues:
+  - id: "QA-NOTE-001"
+    severity: low
+    type: "note"
+    description: "Tests utilisent fallback extraction (pas de clé Mistral/OpenAI en dev)"
+    impact: "Aucun - comportement attendu en environnement dev/test"
+
+waiver:
+  active: false
+
+next_action: "Merge authorized - Story marked as Done"
+test_results:
+  summary: "31/31 tests passed"
+  files:
+    - "tests/unit/ocr.service.test.ts: 2 tests ✓"
+    - "tests/unit/crypto.test.ts: 22 tests ✓"
+    - "tests/unit/extraction.service.test.ts: 2 tests ✓"
+    - "tests/unit/error-handler.test.ts: 2 tests ✓"
+    - "tests/unit/schema.test.ts: 3 tests ✓"

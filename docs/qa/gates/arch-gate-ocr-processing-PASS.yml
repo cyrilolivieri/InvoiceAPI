@@ -1,0 +1,90 @@
+schema: bmad-gate-v1
+gate_type: ARCH
+reference: "ocr-processing"
+epic_name: "OCR Processing - Extraction de données factures"
+decision: PASS
+reviewer: "Atlas"
+timestamp: "2025-03-26T14:30:00Z"
+project_type: "fullstack"
+
+checks:
+  - id: "ARCH-DOC-001"
+    name: "Architecture document exists"
+    status: PASS
+    required: true
+    file: "docs/architecture.md"
+    notes: "Architecture OCR switchable complète"
+    
+  - id: "ARCH-TECH-001"
+    name: "Tech stack defined"
+    status: PASS
+    required: true
+    file: "docs/architecture/tech-stack.md"
+    notes: "Node.js 22, TypeScript, PostgreSQL, PaddleOCR"
+    
+  - id: "ARCH-STRUCT-001"
+    name: "Project structure defined"
+    status: PASS
+    required: true
+    file: "docs/architecture/source-tree.md"
+    notes: "Structure BMaD validée"
+    
+  - id: "ARCH-DATA-001"
+    name: "Data models defined"
+    status: PASS
+    required: true
+    file: "docs/architecture/data-models.md"
+    notes: "Modèles Invoice, OCRResult, User définis"
+    
+  - id: "ARCH-BACKEND-001"
+    name: "Backend architecture defined"
+    status: PASS
+    required: true
+    file: "docs/architecture/backend-architecture.md"
+    notes: "API REST, services OCR, providers"
+    
+  - id: "ARCH-FRONTEND-001"
+    name: "Frontend architecture defined"
+    status: PASS
+    required: true
+    file: "docs/architecture/frontend-architecture.md"
+    notes: "Upload UI, résultats OCR, dashboard"
+    
+  - id: "ARCH-API-001"
+    name: "API specifications defined"
+    status: PASS
+    required: true
+    file: "docs/architecture/api-spec.md"
+    notes: "Endpoints /upload, /invoices, /ocr définis"
+    
+  - id: "ARCH-SECURITY-001"
+    name: "Security considerations documented"
+    status: CONCERNS
+    required: false
+    file: "docs/architecture/security.md"
+    notes: "Rate limiting à compléter en Phase 2"
+
+blockers:
+  count: 0
+  items: []
+
+metrics:
+  architecture_coverage: "95%"
+  components_defined: 8
+  api_endpoints: 6
+  data_models: 4
+
+waiver:
+  active: false
+
+next_action: "Proceed to story creation with Scrum Master"
+notes: |
+  Architecture OCR switchable validée:
+  - PaddleOCR local (défaut)
+  - Mistral cloud (option)
+  - Interface commune OCRProvider
+  
+  Stack 0 CHF validé:
+  - PaddleOCR Docker local
+  - PostgreSQL local
+  - Redis local
